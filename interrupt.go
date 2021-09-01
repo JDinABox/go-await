@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/signal"
 	"sync"
+	"syscall"
 )
 
 type Interrupt struct {
@@ -19,7 +20,7 @@ func NewInterrupt() *Interrupt {
 
 	go func() {
 		sigint := make(chan os.Signal, 1)
-		signal.Notify(sigint, os.Interrupt)
+		signal.Notify(sigint, os.Interrupt, syscall.SIGTERM)
 		<-sigint
 
 		close(in.closer)
